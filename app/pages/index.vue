@@ -13,7 +13,7 @@
           <el-checkbox v-model="isCreateMode">アカウントを作成する</el-checkbox>
         </div>
         <div class="text-right">
-          <el-button type="primary">{{buttonText}}</el-button>
+          <el-button type="primary" @click="handleClickSubmit">{{buttonText}}</el-button>
         </div>
       </form>
     </el-card>
@@ -22,6 +22,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Cookies from 'universal-cookie'
 
 export default {
   asyncData() {
@@ -35,10 +36,12 @@ export default {
   computed: {
     buttonText() {
       return this.isCreateMode ? '新規登録' : 'ログイン'
-    }
+    },
+    ...mapGetters(['user'])
   },
   methods: {
     async handleClickSubmit() {
+      const cookies = new Cookies()
       if (this.isCreateMode) {
         try {
           await this.register({ ...this.formData })
@@ -49,6 +52,7 @@ export default {
             position: 'bottom-right',
             duration: 1000
           })
+          cookies.set('user', JSON.stringify(this.user))
           this.$router.push('/posts/')
         } catch {
           this.$notify.error({
@@ -64,7 +68,7 @@ export default {
           this.$notify({
             type: 'success',
             title: 'ログイン成功',
-            message: `${title.formData.id}としてログインしました`,
+            message: `${this.formData.id}としてログインしました`,
             position: 'bottom-right',
             duration: 1000
           })

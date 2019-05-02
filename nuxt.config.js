@@ -35,7 +35,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    { src: '@/plugins/element-ui', ssr: true },
+    '~/plugins/firebase',
   ],
 
   /*
@@ -44,12 +45,13 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
   ],
   /*
   ** Axios module configuration
   */
   axios: {
-    databaseURL: "https://nuxt-mini-blog.firebaseio.com"
+    baseURL: 'https://nuxt-mini-blog.firebaseio.com'
   },
 
   /*
@@ -63,5 +65,8 @@ export default {
     */
     extend(config, ctx) {
     }
+  },
+  router: {
+    middleware: ['auth-cookie']
   }
 }

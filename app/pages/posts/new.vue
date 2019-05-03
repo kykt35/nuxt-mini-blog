@@ -28,7 +28,7 @@ export default {
     return {
       formData: {
         title: '',
-        body: ''
+        body: '',
       }
     }
   },
